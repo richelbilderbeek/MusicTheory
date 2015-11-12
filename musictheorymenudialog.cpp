@@ -50,7 +50,7 @@ ribi::About ribi::MusicTheoryMenuDialog::GetAbout() const noexcept
     "Richel Bilderbeek",
     "MusicTheory",
     "tool for visualizing my music theory",
-    "the 11th of August 2012",
+    "the 12th of November 2015",
     "2012-2015",
     "http://www.richelbilderbeek.nl/ToolMusicTheory.htm",
     GetVersion(),
@@ -78,18 +78,9 @@ ribi::Help ribi::MusicTheoryMenuDialog::GetHelp() const noexcept
   );
 }
 
-boost::shared_ptr<const ribi::Program> ribi::MusicTheoryMenuDialog::GetProgram() const noexcept
-{
-  const boost::shared_ptr<const ribi::Program> p {
-    new ProgramMusicTheory
-  };
-  assert(p);
-  return p;
-}
-
 std::string ribi::MusicTheoryMenuDialog::GetVersion() const noexcept
 {
-  return "1.2";
+  return "1.3";
 }
 
 std::vector<std::string> ribi::MusicTheoryMenuDialog::GetVersionHistory() const noexcept
@@ -98,6 +89,7 @@ std::vector<std::string> ribi::MusicTheoryMenuDialog::GetVersionHistory() const 
     "2012-08-10: version 1.0: initial version",
     "2012-08-11: version 1.1: changes in the background, support crosscompiling to Windows",
     "2012-08-17: version 1.2: added multi-scale chord relations"
+    "2015-11-12: version 1.3: moved to own GitHub"
   };
 }
 

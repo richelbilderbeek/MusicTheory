@@ -19,7 +19,7 @@
    <string>MusicTheory</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="ToolMusicTheory.qrc">
+   <iconset resource="MusicTheory.qrc">
     <normaloff>:/images/R.png</normaloff>:/images/R.png</iconset>
   </property>
   <property name="styleSheet">
@@ -45,7 +45,7 @@ selection-background-color: white
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="ToolMusicTheory.qrc">:/images/ToolMusicTheory.png</pixmap>
+      <pixmap resource="MusicTheory.qrc">:/images/MusicTheory.png</pixmap>
      </property>
     </widget>
    </item>
@@ -98,7 +98,7 @@ selection-background-color: white
   <tabstop>button_quit</tabstop>
  </tabstops>
  <resources>
-  <include location="ToolMusicTheory.qrc"/>
+  <include location="MusicTheory.qrc"/>
  </resources>
  <connections/>
 </ui>
