@@ -25,7 +25,6 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "musicchord.h"
 #include "musicnote.h"
 #include "musicscale.h"
-#include "richelbilderbeekprogram.h"
 #include "testtimer.h"
 #include "trace.h"
 
