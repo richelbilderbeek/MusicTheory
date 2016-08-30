@@ -132,16 +132,7 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
       ui->scale_1->currentText().toLower().toStdString(),root);
 
     //Obtain the fitting chords in the scale
-    {
-      std::vector<boost::shared_ptr<Music::Chord> > tmp;
-      std::copy_if(chords_1.begin(),chords_1.end(),std::back_inserter(tmp),
-        [scale](const boost::shared_ptr<Music::Chord>& chord)
-        {
-          return scale->Fits(chord);
-        }
-      );
-      chords_1.swap(tmp);
-    }
+    chords_1 = FilterFittingChords(chords_1, scale);
 
     //Obtain only the chords the user wants to have displayed
     {
@@ -165,16 +156,7 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
       ui->scale_2->currentText().toLower().toStdString(),root);
 
     //Obtain the fitting chords in the scale
-    {
-      std::vector<boost::shared_ptr<Music::Chord> > tmp;
-      std::copy_if(chords_2.begin(),chords_2.end(),std::back_inserter(tmp),
-        [scale](const boost::shared_ptr<Music::Chord>& chord)
-        {
-          return scale->Fits(chord);
-        }
-      );
-      chords_2.swap(tmp);
-    }
+    chords_2 = FilterFittingChords(chords_2, scale);
 
     //Obtain only the chords the user wants to have displayed
     {
@@ -190,6 +172,25 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
   }
 
   ui->widget->SetChords(chords_1,chords_2);
+}
+
+std::vector<boost::shared_ptr<ribi::Music::Chord>>
+ribi::FilterFittingChords(
+  std::vector<boost::shared_ptr<ribi::Music::Chord>> chords,
+  const boost::shared_ptr<Music::Scale>& scale
+)
+{
+  std::vector<boost::shared_ptr<Music::Chord> > tmp;
+  std::copy_if(
+    std::begin(chords),
+    std::end(chords),
+    std::back_inserter(tmp),
+    [scale](const boost::shared_ptr<Music::Chord>& chord)
+    {
+      return scale->Fits(chord);
+    }
+  );
+  return tmp;
 }
 
 ribi::Music::Note ribi::QtMusicTheoryMultiScaleDialog::GetRoot1() const

@@ -26,6 +26,7 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include <boost/shared_ptr.hpp>
 #include "qthideandshowdialog.h"
 #include "musicchord.h"
+#include "musicscale.h"
 #pragma GCC diagnostic pop
 
 namespace Ui {
@@ -65,6 +66,13 @@ private:
 
   bool UserWantsIt(const boost::shared_ptr<Music::Chord>& chord) const;
 };
+
+//Obtain the fitting chords in the scale
+std::vector<boost::shared_ptr<Music::Chord>> FilterFittingChords(
+  std::vector<boost::shared_ptr<Music::Chord>> chords,
+  const boost::shared_ptr<Music::Scale>& scale
+);
+
 
 } //~namespace ribi
 
