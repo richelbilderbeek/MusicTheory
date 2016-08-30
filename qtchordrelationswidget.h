@@ -49,6 +49,8 @@ struct QtChordRelationsWidget : public QGraphicsView
 
   private:
   QGraphicsScene * const m_scene;
+
+  void PositionQtChords(std::vector<QtChordVertex *> qt_chords);
 };
 
 std::vector<ribi::QtChordVertex *> CreateQtChordVertices(

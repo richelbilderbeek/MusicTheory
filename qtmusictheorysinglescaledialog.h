@@ -34,7 +34,7 @@ namespace ribi {
 
 class QtMusicTheorySingleScaleDialog : public QtHideAndShowDialog
 {
-  Q_OBJECT
+  Q_OBJECT //!OCLINT
     
 public:
   explicit QtMusicTheorySingleScaleDialog(QWidget *parent = 0);

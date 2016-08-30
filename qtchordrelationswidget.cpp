@@ -57,6 +57,24 @@ std::vector<std::string> ribi::QtChordRelationsWidget::GetVersionHistory() noexc
   return v;
 }
 
+void ribi::QtChordRelationsWidget::PositionQtChords(std::vector<QtChordVertex *> qt_chords)
+{
+  //Circumference must be 64 * SQRT(2) * sz,
+  //So ray must be circumference / 2 * M_PI
+  const std::size_t sz = qt_chords.size();
+  //const double ray = 2.0 * 64.0 * std::sqrt(2.0) * static_cast<double>(sz) / (2.0 * M_PI);
+  const double ray = 0.4 * static_cast<double>(std::min(this->width(),this->height()));
+  const double pi = boost::math::constants::pi<double>();
+  const double d_angle = 2.0 * pi / static_cast<double>(sz);
+  for (std::size_t i = 0; i!=sz; ++i)
+  {
+    const double angle = static_cast<double>(i) * d_angle;
+    const double x = (0.5*static_cast<double>(this->width())) + (std::sin(angle)*ray);
+    const double y = (0.5*static_cast<double>(this->height())) - (std::cos(angle)*ray);
+    qt_chords[i]->setPos(x,y);
+  }
+}
+
 void ribi::QtChordRelationsWidget::resizeEvent(QResizeEvent *)
 {
   m_scene->setSceneRect(this->rect());
@@ -68,14 +86,11 @@ std::vector<ribi::QtChordVertex *> ribi::CreateQtChordVertices(
 {
   std::vector<QtChordVertex * > qt_chords;
 
-  //Create the qt_chords
-
   std::transform(std::begin(chords), std::end(chords),
     std::back_inserter(qt_chords),
     [](boost::shared_ptr<Music::Chord>& chord)
     {
-      QtChordVertex * const qt_chord = new QtChordVertex(chord,0);
-      return qt_chord;
+      return new QtChordVertex(chord,0);
     }
   );
 
@@ -88,23 +103,7 @@ void ribi::QtChordRelationsWidget::SetChords(std::vector<boost::shared_ptr<Music
 
   std::vector<QtChordVertex * > qt_chords = CreateQtChordVertices(chords);
 
-  //Position the qt_chords
-  {
-    //Circumference must be 64 * SQRT(2) * sz,
-    //So ray must be circumference / 2 * M_PI
-    const std::size_t sz = qt_chords.size();
-    //const double ray = 2.0 * 64.0 * std::sqrt(2.0) * static_cast<double>(sz) / (2.0 * M_PI);
-    const double ray = 0.4 * static_cast<double>(std::min(this->width(),this->height()));
-    const double pi = boost::math::constants::pi<double>();
-    const double d_angle = 2.0 * pi / static_cast<double>(sz);
-    for (std::size_t i = 0; i!=sz; ++i)
-    {
-      const double angle = static_cast<double>(i) * d_angle;
-      const double x = (0.5*static_cast<double>(this->width())) + (std::sin(angle)*ray);
-      const double y = (0.5*static_cast<double>(this->height())) - (std::cos(angle)*ray);
-      qt_chords[i]->setPos(x,y);
-    }
-  }
+  PositionQtChords(qt_chords);
 
   //m_scene will delete these QtChords
   for (auto qtchord: qt_chords) { m_scene->addItem(qtchord); }

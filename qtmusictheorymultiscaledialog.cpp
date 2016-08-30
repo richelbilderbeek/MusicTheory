@@ -119,28 +119,17 @@ void ribi::QtMusicTheoryMultiScaleDialog::ConnectAll()
 
 void ribi::QtMusicTheoryMultiScaleDialog::any_change()
 {
-  std::vector<boost::shared_ptr<Music::Chord> > chords_1
+  ShowNotes1();
+  ShowNotes2();
+  std::vector<boost::shared_ptr<Music::Chord>> chords_1
     = Music::Chord::CreateAllChords();
   {
     //Obtain the root
-    const Music::Note root(ui->root_1->currentText().toStdString());
+    const Music::Note root{GetRoot1()};
 
     //Obtain the scale
     const boost::shared_ptr<Music::Scale> scale = Music::Scale::CreateScale(
       ui->scale_1->currentText().toLower().toStdString(),root);
-
-    //Obtain the notes in the scale
-    const std::vector<Music::Note> notes = scale->GetNotes();
-    std::string notes_str;
-    std::for_each(notes.begin(),notes.end(),
-      [&notes_str](const Music::Note& note)
-      {
-        notes_str+=note.ToStr();
-        notes_str+="-";
-      }
-    );
-    notes_str.resize(notes_str.size() - 1);
-    ui->notes_1->setText(notes_str.c_str());
 
     //Obtain the fitting chords in the scale
     {
@@ -169,24 +158,11 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
   std::vector<boost::shared_ptr<Music::Chord> > chords_2 = Music::Chord::CreateAllChords();
   {
     //Obtain the root
-    const Music::Note root(ui->root_2->currentText().toStdString());
+    const Music::Note root{GetRoot2()};
 
     //Obtain the scale
     const boost::shared_ptr<Music::Scale> scale = Music::Scale::CreateScale(
       ui->scale_2->currentText().toLower().toStdString(),root);
-
-    //Obtain the notes in the scale
-    const std::vector<Music::Note> notes = scale->GetNotes();
-    std::string notes_str;
-    std::for_each(notes.begin(),notes.end(),
-      [&notes_str](const Music::Note& note)
-      {
-        notes_str+=note.ToStr();
-        notes_str+="-";
-      }
-    );
-    notes_str.resize(notes_str.size() - 1);
-    ui->notes_2->setText(notes_str.c_str());
 
     //Obtain the fitting chords in the scale
     {
@@ -216,13 +192,66 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
   ui->widget->SetChords(chords_1,chords_2);
 }
 
+ribi::Music::Note ribi::QtMusicTheoryMultiScaleDialog::GetRoot1() const
+{
+  return Music::Note(ui->root_1->currentText().toStdString());
+}
+
+ribi::Music::Note ribi::QtMusicTheoryMultiScaleDialog::GetRoot2() const
+{
+  return Music::Note(ui->root_2->currentText().toStdString());
+}
+
 void ribi::QtMusicTheoryMultiScaleDialog::resizeEvent(QResizeEvent *)
 {
   any_change();
 }
 
+void ribi::QtMusicTheoryMultiScaleDialog::ShowNotes1()
+{
+  const Music::Note root{GetRoot1()};
 
-bool ribi::QtMusicTheoryMultiScaleDialog::UserWantsIt(const boost::shared_ptr<Music::Chord>& chord) const
+  const boost::shared_ptr<Music::Scale> scale = Music::Scale::CreateScale(
+    ui->scale_1->currentText().toLower().toStdString(),root);
+
+  //Obtain the notes in the scale
+  const std::vector<Music::Note> notes = scale->GetNotes();
+  std::string notes_str;
+  std::for_each(notes.begin(),notes.end(),
+    [&notes_str](const Music::Note& note)
+    {
+      notes_str+=note.ToStr();
+      notes_str+="-";
+    }
+  );
+  notes_str.resize(notes_str.size() - 1);
+  ui->notes_1->setText(notes_str.c_str());
+}
+
+void ribi::QtMusicTheoryMultiScaleDialog::ShowNotes2()
+{
+  const Music::Note root{GetRoot2()};
+
+  const boost::shared_ptr<Music::Scale> scale = Music::Scale::CreateScale(
+    ui->scale_2->currentText().toLower().toStdString(),root);
+
+  //Obtain the notes in the scale
+  const std::vector<Music::Note> notes = scale->GetNotes();
+  std::string notes_str;
+  std::for_each(notes.begin(),notes.end(),
+    [&notes_str](const Music::Note& note)
+    {
+      notes_str+=note.ToStr();
+      notes_str+="-";
+    }
+  );
+  notes_str.resize(notes_str.size() - 1);
+  ui->notes_2->setText(notes_str.c_str());
+}
+
+bool ribi::QtMusicTheoryMultiScaleDialog::UserWantsIt(
+  const boost::shared_ptr<Music::Chord>& chord
+) const
 {
   return (ui->display_6->isChecked() && dynamic_cast<const Music::Chord6*>(chord.get()))
     || (ui->display_7->isChecked() && dynamic_cast<const Music::Chord7*>(chord.get()))

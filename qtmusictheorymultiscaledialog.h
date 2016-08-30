@@ -36,7 +36,7 @@ namespace ribi {
 
 class QtMusicTheoryMultiScaleDialog : public QtHideAndShowDialog
 {
-  Q_OBJECT
+  Q_OBJECT //!OCLINT
     
 public:
   explicit QtMusicTheoryMultiScaleDialog(QWidget *parent = 0);
@@ -56,6 +56,12 @@ private:
   Ui::QtMusicTheoryMultiScaleDialog *ui;
 
   void ConnectAll();
+
+  Music::Note GetRoot1() const;
+  Music::Note GetRoot2() const;
+
+  void ShowNotes1();
+  void ShowNotes2();
 
   bool UserWantsIt(const boost::shared_ptr<Music::Chord>& chord) const;
 };
