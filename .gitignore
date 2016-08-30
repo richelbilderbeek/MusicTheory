@@ -34,3 +34,5 @@ object_script*
 ui_
 release/
 ui_*
+*.tar.gz
+oclint-0.10.3/

@@ -25,22 +25,17 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "musicchord.h"
 #include "musicnote.h"
 #include "musicscale.h"
-#include "testtimer.h"
-#include "trace.h"
 
 int ribi::MusicTheoryMenuDialog::ExecuteSpecific(const std::vector<std::string>& argv) noexcept
 {
-  #ifndef NDEBUG
-  Test();
-  #endif
   const int argc = static_cast<int>(argv.size());
-  if (argc == 1)
+  if (argc > 1)
   {
     std::cout << GetHelp() << '\n';
     return 1;
   }
-  assert(!"TODO");
-  return 1;
+  std::cout << "MusicTheory does not have a command-line interface\n";
+  return 0;
 }
 
 ribi::About ribi::MusicTheoryMenuDialog::GetAbout() const noexcept
@@ -58,8 +53,6 @@ ribi::About ribi::MusicTheoryMenuDialog::GetAbout() const noexcept
   a.AddLibrary("Music::Chord version: " + Music::Chord::GetVersion());
   a.AddLibrary("Music::Note version: " + Music::Note::GetVersion());
   a.AddLibrary("Music::Scale version: " + Music::Scale::GetVersion());
-  a.AddLibrary("TestTimer version: " + TestTimer::GetVersion());
-  a.AddLibrary("Trace version: " + Trace::GetVersion());
   return a;
 }
 
@@ -91,15 +84,3 @@ std::vector<std::string> ribi::MusicTheoryMenuDialog::GetVersionHistory() const 
     "2015-11-12: version 1.3: moved to own GitHub"
   };
 }
-
-#ifndef NDEBUG
-void ribi::MusicTheoryMenuDialog::Test() noexcept
-{
-  {
-    static bool is_tested{false};
-    if (is_tested) return;
-    is_tested = true;
-  }
-  const TestTimer test_timer(__func__,__FILE__,1.0);
-}
-#endif
