@@ -44,6 +44,29 @@ ribi::QtMultiScaleChordRelationsWidget::QtMultiScaleChordRelationsWidget(QWidget
   this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
+std::vector<boost::shared_ptr<ribi::Music::Chord>> ribi::CollectChords(
+  std::vector<boost::shared_ptr<Music::Chord>>& chords1,
+  std::vector<boost::shared_ptr<Music::Chord>>& chords2
+)
+{
+  std::vector<boost::shared_ptr<Music::Chord>> chords(
+    std::begin(chords1), std::end(chords1)
+  );
+  std::copy_if(std::begin(chords2),std::end(chords2),std::back_inserter(chords),
+    [chords](boost::shared_ptr<Music::Chord>& chord)
+    {
+      return 0 == std::count_if(
+        std::begin(chords),std::end(chords),
+        [chord](const boost::shared_ptr<Music::Chord>& another_chord)
+        {
+          return chord->ToStr() == another_chord->ToStr();
+        }
+      );
+    }
+  );
+  return chords;
+}
+
 std::string ribi::QtMultiScaleChordRelationsWidget::GetVersion() noexcept
 {
   return "1.1";
@@ -70,18 +93,9 @@ void ribi::QtMultiScaleChordRelationsWidget::SetChords(
   m_scene->clear();
 
   //Collect all chords
-  std::vector<boost::shared_ptr<Music::Chord> > chords(chords1.begin(),chords1.end());
-  std::copy_if(chords2.begin(),chords2.end(),std::back_inserter(chords),
-    [chords](boost::shared_ptr<Music::Chord>& chord)
-    {
-      return 0 == std::count_if(chords.begin(),chords.end(),
-        [chord](const boost::shared_ptr<Music::Chord>& another_chord)
-        {
-          return chord->ToStr() == another_chord->ToStr();
-        }
-      );
-    }
-  );
+  std::vector<boost::shared_ptr<Music::Chord> > chords
+    = CollectChords(chords1, chords2);
+
   //assert(chords.size() == chords1.size() + chords2.size());
 
   std::vector<QtChordVertex * > qt_chords;

@@ -50,7 +50,8 @@ ribi::QtMusicTheoryMultiScaleDialog::QtMusicTheoryMultiScaleDialog(QWidget *pare
   {
     ui->scale_1->clear();
     ui->scale_2->clear();
-    const std::vector<boost::shared_ptr<Music::Scale> > v = Music::Scale::CreateScales(Music::Note(0));
+    const std::vector<boost::shared_ptr<Music::Scale> > v
+      = Music::Scale::CreateScales(Music::Note(0));
     std::for_each(v.begin(),v.end(),
       [this](const boost::shared_ptr<Music::Scale>& scale)
       {
@@ -60,6 +61,16 @@ ribi::QtMusicTheoryMultiScaleDialog::QtMusicTheoryMultiScaleDialog(QWidget *pare
     );
   }
 
+  ConnectAll();
+}
+
+ribi::QtMusicTheoryMultiScaleDialog::~QtMusicTheoryMultiScaleDialog() noexcept
+{
+  delete ui;
+}
+
+void ribi::QtMusicTheoryMultiScaleDialog::ConnectAll()
+{
   QObject::connect(
     ui->scale_1, SIGNAL(currentIndexChanged(int)),
     this, SLOT(any_change())
@@ -99,22 +110,17 @@ ribi::QtMusicTheoryMultiScaleDialog::QtMusicTheoryMultiScaleDialog(QWidget *pare
   );
   QObject::connect(ui->display_7,SIGNAL(stateChanged(int)),this,
     SLOT(any_change())
-    );
+  );
   QObject::connect(ui->display_m7,SIGNAL(stateChanged(int)),this,
     SLOT(any_change())
-    );
+  );
 
-  //any_change();
-}
-
-ribi::QtMusicTheoryMultiScaleDialog::~QtMusicTheoryMultiScaleDialog() noexcept
-{
-  delete ui;
 }
 
 void ribi::QtMusicTheoryMultiScaleDialog::any_change()
 {
-  std::vector<boost::shared_ptr<Music::Chord> > chords_1 = Music::Chord::CreateAllChords();
+  std::vector<boost::shared_ptr<Music::Chord> > chords_1
+    = Music::Chord::CreateAllChords();
   {
     //Obtain the root
     const Music::Note root(ui->root_1->currentText().toStdString());
@@ -154,16 +160,7 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
       std::copy_if(chords_1.begin(),chords_1.end(),std::back_inserter(tmp),
         [this](const boost::shared_ptr<Music::Chord>& chord)
         {
-          return
-             (ui->display_6->isChecked() && dynamic_cast<const Music::Chord6*>(chord.get()))
-          || (ui->display_7->isChecked() && dynamic_cast<const Music::Chord7*>(chord.get()))
-          || (ui->display_aug->isChecked() && dynamic_cast<const Music::ChordAug*>(chord.get()))
-          || (ui->display_dim->isChecked() && dynamic_cast<const Music::ChordDim*>(chord.get()))
-          || (ui->display_m6->isChecked() && dynamic_cast<const Music::ChordMinor6*>(chord.get()))
-          || (ui->display_m7->isChecked() && dynamic_cast<const Music::ChordMinor7*>(chord.get()))
-          || (ui->display_major->isChecked() && dynamic_cast<const Music::ChordMajor*>(chord.get()))
-          || (ui->display_minor->isChecked() && dynamic_cast<const Music::ChordMinor*>(chord.get()))
-          ;
+          return UserWantsIt(chord);
         }
       );
       chords_1.swap(tmp);
@@ -209,16 +206,7 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
       std::copy_if(chords_2.begin(),chords_2.end(),std::back_inserter(tmp),
         [this](const boost::shared_ptr<Music::Chord>& chord)
         {
-          return
-             (ui->display_6->isChecked() && dynamic_cast<const Music::Chord6*>(chord.get()))
-          || (ui->display_7->isChecked() && dynamic_cast<const Music::Chord7*>(chord.get()))
-          || (ui->display_aug->isChecked() && dynamic_cast<const Music::ChordAug*>(chord.get()))
-          || (ui->display_dim->isChecked() && dynamic_cast<const Music::ChordDim*>(chord.get()))
-          || (ui->display_m6->isChecked() && dynamic_cast<const Music::ChordMinor6*>(chord.get()))
-          || (ui->display_m7->isChecked() && dynamic_cast<const Music::ChordMinor7*>(chord.get()))
-          || (ui->display_major->isChecked() && dynamic_cast<const Music::ChordMajor*>(chord.get()))
-          || (ui->display_minor->isChecked() && dynamic_cast<const Music::ChordMinor*>(chord.get()))
-          ;
+          return UserWantsIt(chord);
         }
       );
       chords_2.swap(tmp);
@@ -231,4 +219,18 @@ void ribi::QtMusicTheoryMultiScaleDialog::any_change()
 void ribi::QtMusicTheoryMultiScaleDialog::resizeEvent(QResizeEvent *)
 {
   any_change();
+}
+
+
+bool ribi::QtMusicTheoryMultiScaleDialog::UserWantsIt(const boost::shared_ptr<Music::Chord>& chord) const
+{
+  return (ui->display_6->isChecked() && dynamic_cast<const Music::Chord6*>(chord.get()))
+    || (ui->display_7->isChecked() && dynamic_cast<const Music::Chord7*>(chord.get()))
+    || (ui->display_aug->isChecked() && dynamic_cast<const Music::ChordAug*>(chord.get()))
+    || (ui->display_dim->isChecked() && dynamic_cast<const Music::ChordDim*>(chord.get()))
+    || (ui->display_m6->isChecked() && dynamic_cast<const Music::ChordMinor6*>(chord.get()))
+    || (ui->display_m7->isChecked() && dynamic_cast<const Music::ChordMinor7*>(chord.get()))
+    || (ui->display_major->isChecked() && dynamic_cast<const Music::ChordMajor*>(chord.get()))
+    || (ui->display_minor->isChecked() && dynamic_cast<const Music::ChordMinor*>(chord.get()))
+  ;
 }

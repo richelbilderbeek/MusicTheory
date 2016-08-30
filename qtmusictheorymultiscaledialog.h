@@ -23,7 +23,9 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Weffc++"
+#include <boost/shared_ptr.hpp>
 #include "qthideandshowdialog.h"
+#include "musicchord.h"
 #pragma GCC diagnostic pop
 
 namespace Ui {
@@ -52,6 +54,10 @@ private slots:
 
 private:
   Ui::QtMusicTheoryMultiScaleDialog *ui;
+
+  void ConnectAll();
+
+  bool UserWantsIt(const boost::shared_ptr<Music::Chord>& chord) const;
 };
 
 } //~namespace ribi

@@ -53,7 +53,9 @@ void ribi::QtMusicTheoryMenuDialog::on_button_about_clicked()
   a.AddLibrary("QtChordEdge version: " + QtChordEdge::GetVersion());
   a.AddLibrary("QtChordVertex version: " + QtChordVertex::GetVersion());
   a.AddLibrary("QtChordRelationsWidget version: " + QtChordRelationsWidget::GetVersion());
-  a.AddLibrary("QtMultiScaleChordRelationsWidget version: " + QtMultiScaleChordRelationsWidget::GetVersion());
+  a.AddLibrary("QtMultiScaleChordRelationsWidget version: "
+    + QtMultiScaleChordRelationsWidget::GetVersion()
+  );
   QtAboutDialog d(a);
   d.setWindowIcon(this->windowIcon());
   d.setStyleSheet(this->styleSheet());

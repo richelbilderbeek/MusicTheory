@@ -54,6 +54,11 @@ struct QtMultiScaleChordRelationsWidget : public QGraphicsView
   QGraphicsScene * const m_scene;
 };
 
+std::vector<boost::shared_ptr<Music::Chord>> CollectChords(
+  std::vector<boost::shared_ptr<Music::Chord>>& chords1,
+  std::vector<boost::shared_ptr<Music::Chord>>& chords2
+);
+
 } //~namespace ribi
 
 #endif // QTMULTISCALECHORDRELATIONSWIDGET_H

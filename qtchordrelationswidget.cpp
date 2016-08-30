@@ -62,24 +62,32 @@ void ribi::QtChordRelationsWidget::resizeEvent(QResizeEvent *)
   m_scene->setSceneRect(this->rect());
 }
 
+std::vector<ribi::QtChordVertex *> ribi::CreateQtChordVertices(
+  std::vector<boost::shared_ptr<Music::Chord>>& chords
+) noexcept
+{
+  std::vector<QtChordVertex * > qt_chords;
+
+  //Create the qt_chords
+
+  std::transform(std::begin(chords), std::end(chords),
+    std::back_inserter(qt_chords),
+    [](boost::shared_ptr<Music::Chord>& chord)
+    {
+      QtChordVertex * const qt_chord = new QtChordVertex(chord,0);
+      return qt_chord;
+    }
+  );
+
+  return qt_chords;
+}
+
 void ribi::QtChordRelationsWidget::SetChords(std::vector<boost::shared_ptr<Music::Chord> >& chords)
 {
   m_scene->clear();
 
-  std::vector<QtChordVertex * > qt_chords;
+  std::vector<QtChordVertex * > qt_chords = CreateQtChordVertices(chords);
 
-  //Create QtChords and add them to the scene
-  std::transform(chords.begin(),chords.end(),
-    std::back_inserter(qt_chords),
-    [this](boost::shared_ptr<Music::Chord>& chord)
-    {
-      //m_scene will delete these QtChords
-      QtChordVertex * const qt_chord = new QtChordVertex(chord,0);
-      m_scene->addItem(qt_chord);
-      return qt_chord;
-      //m_scene->addItem(qt_chord);
-    }
-  );
   //Position the qt_chords
   {
     //Circumference must be 64 * SQRT(2) * sz,
@@ -97,6 +105,9 @@ void ribi::QtChordRelationsWidget::SetChords(std::vector<boost::shared_ptr<Music
       qt_chords[i]->setPos(x,y);
     }
   }
+
+  //m_scene will delete these QtChords
+  for (auto qtchord: qt_chords) { m_scene->addItem(qtchord); }
 
   //Create the edges based on the number of identical notes
   const std::size_t sz = chords.size();

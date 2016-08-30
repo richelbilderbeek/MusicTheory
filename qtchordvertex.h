@@ -45,8 +45,11 @@ struct QtChordVertex : public QGraphicsItem
   ///Obtain this class its version history
   static std::vector<std::string> GetVersionHistory() noexcept;
 
-  //Thanks compiler, for reminding me to define this
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+  void paint(
+    QPainter *painter,
+    const QStyleOptionGraphicsItem *option,
+    QWidget *widget
+  ) override;
 
   ///Set the color
   void SetColor(const QColor color) { m_color = color; }

@@ -24,6 +24,8 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 #include <boost/shared_ptr.hpp>
 #include <QGraphicsView>
+#include "qtchordvertex.h"
+
 struct QGraphicsScene;
 
 namespace ribi {
@@ -48,6 +50,10 @@ struct QtChordRelationsWidget : public QGraphicsView
   private:
   QGraphicsScene * const m_scene;
 };
+
+std::vector<ribi::QtChordVertex *> CreateQtChordVertices(
+  std::vector<boost::shared_ptr<Music::Chord>>& chords
+) noexcept;
 
 } //~namespace ribi
 
