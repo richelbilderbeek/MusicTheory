@@ -18,6 +18,7 @@ h_files=`ls *.h | egrep -v "^ui_.*\.h$"`
   -I../RibiClasses/CppTestTimer \
   -I../RibiClasses/CppFileIo \
   -I../RibiClasses/CppMenuDialog \
+  -I../RibiClasses/CppMusic \
   -I../RibiClasses/CppPlane \
   -I../RibiClasses/CppQtAboutDialog \
   -I../RibiClasses/CppQtArrowItem \
