@@ -28,22 +28,17 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 #include "qtaboutdialog.h"
 #include "qtchordedge.h"
 #include "qtchordrelationswidget.h"
-#include "testtimer.h"
 #include "qtchordvertex.h"
 #include "qtmultiscalechordrelationswidget.h"
 #include "qtmusictheorysinglescaledialog.h"
 #include "qtmusictheorymultiscaledialog.h"
 #include "ui_qtmusictheorymenudialog.h"
-#include "trace.h"
 #pragma GCC diagnostic pop
 
 ribi::QtMusicTheoryMenuDialog::QtMusicTheoryMenuDialog(QWidget *parent) :
     QtHideAndShowDialog(parent),
     ui(new Ui::QtMusicTheoryMenuDialog)
 {
-  #ifndef NDEBUG
-  Test();
-  #endif
   ui->setupUi(this);
 }
 
@@ -81,15 +76,3 @@ void ribi::QtMusicTheoryMenuDialog::on_button_start_multiscale_clicked()
   QtMusicTheoryMultiScaleDialog d;
   this->ShowChild(&d);
 }
-
-#ifndef NDEBUG
-void ribi::QtMusicTheoryMenuDialog::Test() noexcept
-{
-  {
-    static bool is_tested{false};
-    if (is_tested) return;
-    is_tested = true;
-  }
-  const TestTimer test_timer(__func__,__FILE__,1.0);
-}
-#endif
