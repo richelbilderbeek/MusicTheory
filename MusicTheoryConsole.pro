@@ -54,7 +54,7 @@ include(../RibiClasses/CppHelp/CppHelp.pri)
 include(../RibiClasses/CppMenuDialog/CppMenuDialog.pri)
 include(../RibiClasses/CppTestTimer/CppTestTimer.pri)
 include(../RibiClasses/CppTrace/CppTrace.pri)
-include(../RibiClasses/CppMusic/CppMusic.pri)
+include(CppMusic.pri)
 include(../MusicTheory/MusicTheoryConsole.pri)
 
 SOURCES += main.cpp

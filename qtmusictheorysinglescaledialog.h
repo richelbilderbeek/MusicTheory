@@ -23,7 +23,9 @@ along with this program.If not, see <http://www.gnu.org/licenses/>.
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Weffc++"
+#include <boost/shared_ptr.hpp>
 #include "qthideandshowdialog.h"
+#include "musicchord.h"
 #pragma GCC diagnostic pop
 
 namespace Ui {
@@ -45,13 +47,12 @@ public:
   void resizeEvent(QResizeEvent *);
     
 private slots:
-  //Called whenever there is a change
-  //Cannot call this slot 'any_change', because this will result in the warning
-  //'QMetaObject::connectSlotsByName: No matching signal for any_change()'
   void any_change();
 
 private:
   Ui::QtMusicTheorySingleScaleDialog *ui;
+
+  bool UserWantsIt(const boost::shared_ptr<Music::Chord>& chord) const;
 };
 
 } //~namespace ribi

@@ -59,21 +59,18 @@ ribi::QtMusicTheorySingleScaleDialog::QtMusicTheorySingleScaleDialog(QWidget *pa
   }
 
   QObject::connect(
-    ui->scale,
-    static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
-    this,
-    &ribi::QtMusicTheorySingleScaleDialog::any_change
+    ui->scale, SIGNAL(currentIndexChanged(int)),
+    this, SLOT(any_change())
   );
-  QObject::connect(ui->root,static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_major,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_minor,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_aug,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_dim,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_6,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_m6,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_7,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-  QObject::connect(ui->display_m7,static_cast<void (QCheckBox::*)(int)>(&QCheckBox::stateChanged),this,&ribi::QtMusicTheorySingleScaleDialog::any_change);
-
+  QObject::connect(ui->root,SIGNAL(currentIndexChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_major,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_minor,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_aug,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_dim,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_6,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_m6,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_7,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
+  QObject::connect(ui->display_m7,SIGNAL(stateChanged(int)),this,SLOT(any_change()));
 
   //any_change();
 }
@@ -125,16 +122,7 @@ void ribi::QtMusicTheorySingleScaleDialog::any_change()
     std::copy_if(chords.begin(),chords.end(),std::back_inserter(tmp),
       [this](const boost::shared_ptr<Music::Chord>& chord)
       {
-        return
-           (ui->display_6->isChecked() && dynamic_cast<const Music::Chord6*>(chord.get()))
-        || (ui->display_7->isChecked() && dynamic_cast<const Music::Chord7*>(chord.get()))
-        || (ui->display_aug->isChecked() && dynamic_cast<const Music::ChordAug*>(chord.get()))
-        || (ui->display_dim->isChecked() && dynamic_cast<const Music::ChordDim*>(chord.get()))
-        || (ui->display_m6->isChecked() && dynamic_cast<const Music::ChordMinor6*>(chord.get()))
-        || (ui->display_m7->isChecked() && dynamic_cast<const Music::ChordMinor7*>(chord.get()))
-        || (ui->display_major->isChecked() && dynamic_cast<const Music::ChordMajor*>(chord.get()))
-        || (ui->display_minor->isChecked() && dynamic_cast<const Music::ChordMinor*>(chord.get()))
-        ;
+        return UserWantsIt(chord);
       }
     );
     chords.swap(tmp);
@@ -147,4 +135,20 @@ void ribi::QtMusicTheorySingleScaleDialog::any_change()
 void ribi::QtMusicTheorySingleScaleDialog::resizeEvent(QResizeEvent *)
 {
   any_change();
+}
+
+bool ribi::QtMusicTheorySingleScaleDialog::UserWantsIt(
+  const boost::shared_ptr<Music::Chord>& chord
+) const
+{
+  return
+     (ui->display_6->isChecked() && dynamic_cast<const Music::Chord6*>(chord.get()))
+  || (ui->display_7->isChecked() && dynamic_cast<const Music::Chord7*>(chord.get()))
+  || (ui->display_aug->isChecked() && dynamic_cast<const Music::ChordAug*>(chord.get()))
+  || (ui->display_dim->isChecked() && dynamic_cast<const Music::ChordDim*>(chord.get()))
+  || (ui->display_m6->isChecked() && dynamic_cast<const Music::ChordMinor6*>(chord.get()))
+  || (ui->display_m7->isChecked() && dynamic_cast<const Music::ChordMinor7*>(chord.get()))
+  || (ui->display_major->isChecked() && dynamic_cast<const Music::ChordMajor*>(chord.get()))
+  || (ui->display_minor->isChecked() && dynamic_cast<const Music::ChordMinor*>(chord.get()))
+  ;
 }
