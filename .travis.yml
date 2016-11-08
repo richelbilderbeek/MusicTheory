@@ -25,9 +25,9 @@ addons:
 script: 
   - ./build_console.sh
   - ./build_desktop.sh
-  - ./do_oclint.sh
   - ./get_code_cov.sh
   - codecov
+  - ./do_oclint.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
