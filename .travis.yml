@@ -43,9 +43,9 @@ script:
   # Desktop 
   - qmake MusicTheoryDesktop.pro
   - make
-  - ./get_code_cov.sh
+  - ./get_code_cov
   - codecov
-  - ./do_oclint.sh
+  - ./do_oclint
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
