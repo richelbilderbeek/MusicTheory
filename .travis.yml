@@ -1,50 +1,36 @@
-sudo: require
 language: cpp
+dist: bionic
 compiler: gcc
-dist: trusty
-
-# Boost
-addons:
-  apt: 
-    packages: libboost-all-dev
-
-before_install:
-  # C++14
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
 
 install: 
-  # C++14
-  - sudo apt-get install -qq g++-5
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 90
+  - sudo apt update -qq
+  # Boost
+  - sudo apt install -qq libboost-all-dev
   # Qt5
-  - sudo apt-get install -qq libqt5webkit5-dev qtdeclarative5-dev
-  - export QMAKE=/usr/lib/x86_64-linux-gnu/qt5/bin/qmake
+  - sudo apt-get install -qq qt5-qmake qt5-default
   # cppcheck
   - sudo apt-get install -qq cppcheck
   # Codecov
-  - sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-5 90
   - sudo pip install codecov
   # OCLint
   - ./install_oclint
   # Other GitHubs
   - ./download_other_githubs
 
-# Start virtual X server, from https://docs.travis-ci.com/user/gui-and-headless-browsers/
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3 # give xvfb some time to start
+services:
+ - xvfb
 
 script: 
   - qmake MusicTheoryConsole.pro
-  - make
+  - make --silent
   - ./MusicTheoryConsole
   # Desktop 
   - qmake MusicTheoryDesktop.pro
-  - make
-  - ./get_code_cov
-  - codecov
+  - make --silent
+  # Codecov
+  - ./get_code_cov >/dev/null 
+  - codecov >/dev/null
+  # OCLint 
   - ./do_oclint
 
 after_success:
